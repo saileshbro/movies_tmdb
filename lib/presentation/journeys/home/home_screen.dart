@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_tmdb/presentation/blocs/movie_carousel/movie_carousel_bloc.dart';
 import 'package:movies_tmdb/presentation/journeys/drawers/navigation_drawer.dart';
+import 'package:movies_tmdb/presentation/widgets/app_error_widget.dart';
 import 'package:movies_tmdb/presentation/journeys/home/movie_carousel/movie_carousel_widget.dart';
 import 'package:movies_tmdb/presentation/journeys/home/movie_tabbed/movie_tabbed_widget.dart';
 
@@ -39,6 +40,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: MovieTabbedWidget(),
                 ),
               ],
+            );
+          } else if (state is MovieCarouselError) {
+            return AppErrorWidget(
+              appErrorType: state.error.appErrorType,
+              onRetry: () => context
+                  .bloc<MovieCarouselBloc>()
+                  .add(const CarouselLoadEvent()),
             );
           }
           return const SizedBox.shrink();

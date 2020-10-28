@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:movies_tmdb/data/data_sources/movie_remote_data_source.dart';
@@ -15,8 +17,10 @@ class MovieRepositoryImpl implements MovieRepository {
   Future<Either<AppError, List<Movie>>> getTrending() async {
     try {
       return right(await _remoteDataSource.getTrending());
+    } on SocketException {
+      return left(const AppError(AppErrorType.network));
     } on Exception {
-      return left(const AppError("Something went wrong."));
+      return left(const AppError(AppErrorType.api));
     }
   }
 
@@ -24,8 +28,10 @@ class MovieRepositoryImpl implements MovieRepository {
   Future<Either<AppError, List<MovieEntity>>> getComingSoon() async {
     try {
       return right(await _remoteDataSource.getCommingSoon());
+    } on SocketException {
+      return left(const AppError(AppErrorType.network));
     } on Exception {
-      return left(const AppError("Something went wrong."));
+      return left(const AppError(AppErrorType.api));
     }
   }
 
@@ -33,8 +39,10 @@ class MovieRepositoryImpl implements MovieRepository {
   Future<Either<AppError, List<MovieEntity>>> getPlayingNow() async {
     try {
       return right(await _remoteDataSource.getPlayingNow());
+    } on SocketException {
+      return left(const AppError(AppErrorType.network));
     } on Exception {
-      return left(const AppError("Something went wrong."));
+      return left(const AppError(AppErrorType.api));
     }
   }
 
@@ -42,8 +50,10 @@ class MovieRepositoryImpl implements MovieRepository {
   Future<Either<AppError, List<MovieEntity>>> getPopular() async {
     try {
       return right(await _remoteDataSource.getPopular());
+    } on SocketException {
+      return left(const AppError(AppErrorType.network));
     } on Exception {
-      return left(const AppError("Something went wrong."));
+      return left(const AppError(AppErrorType.api));
     }
   }
 }

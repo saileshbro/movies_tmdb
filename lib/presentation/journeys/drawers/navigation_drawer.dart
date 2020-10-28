@@ -7,7 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_tmdb/presentation/blocs/language_bloc/language_bloc.dart';
 import 'package:movies_tmdb/presentation/journeys/drawers/navigation_expanded_list_item.dart';
 import 'package:movies_tmdb/presentation/journeys/drawers/navigation_list_item.dart';
+import 'package:movies_tmdb/presentation/widgets/app_dialog.dart';
 import 'package:movies_tmdb/presentation/widgets/logo.dart';
+import 'package:wiredash/wiredash.dart';
 
 class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer();
@@ -53,13 +55,34 @@ class NavigationDrawer extends StatelessWidget {
             ),
             NavigationListItem(
               title: TranslationConstants.feedback.t(context),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+                Wiredash.of(context).show();
+              },
             ),
             NavigationListItem(
               title: TranslationConstants.about.t(context),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+                _showDialog(context);
+              },
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      child: AppDialog(
+        title: TranslationConstants.about,
+        description: TranslationConstants.aboutDescription,
+        buttonText: TranslationConstants.okay,
+        image: Image.asset(
+          "assets/pngs/tmdb_logo.png",
+          height: Sizes.dimen_32.h,
         ),
       ),
     );

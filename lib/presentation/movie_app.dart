@@ -12,6 +12,7 @@ import 'package:movies_tmdb/presentation/blocs/movie_tabbed/movie_tabbed_bloc.da
 import 'package:movies_tmdb/presentation/journeys/home/home_screen.dart';
 import 'package:movies_tmdb/presentation/themes/theme_color.dart';
 import 'package:movies_tmdb/presentation/themes/theme_text.dart';
+import 'package:movies_tmdb/presentation/wiredash_app.dart';
 
 class MovieApp extends StatefulWidget {
   @override
@@ -19,6 +20,7 @@ class MovieApp extends StatefulWidget {
 }
 
 class _MovieAppState extends State<MovieApp> {
+  final _navigatorKey = GlobalKey<NavigatorState>();
   MovieCarouselBloc movieCarouselBloc;
   MovieBackdropBloc movieBackdropBloc;
   MovieTabbedBloc movieTabbedBloc;
@@ -54,27 +56,32 @@ class _MovieAppState extends State<MovieApp> {
       child: BlocBuilder<LanguageBloc, LanguageState>(
         builder: (context, state) {
           if (state is LanguageLoaded) {
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: "Movies TMDb",
-              theme: ThemeData(
-                unselectedWidgetColor: AppColor.royalBlue,
-                primaryColor: AppColor.vulcan,
-                scaffoldBackgroundColor: AppColor.vulcan,
-                visualDensity: VisualDensity.adaptivePlatformDensity,
-                textTheme: ThemeText.getTextTheme(),
-                appBarTheme: const AppBarTheme(elevation: 0),
-                accentColor: AppColor.royalBlue,
+            return WiredashApp(
+              navigatorKey: _navigatorKey,
+              languageCode: state.locale.languageCode,
+              child: MaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: "Movies TMDb",
+                theme: ThemeData(
+                  unselectedWidgetColor: AppColor.royalBlue,
+                  primaryColor: AppColor.vulcan,
+                  scaffoldBackgroundColor: AppColor.vulcan,
+                  visualDensity: VisualDensity.adaptivePlatformDensity,
+                  textTheme: ThemeText.getTextTheme(),
+                  appBarTheme: const AppBarTheme(elevation: 0),
+                  accentColor: AppColor.royalBlue,
+                ),
+                navigatorKey: _navigatorKey,
+                home: const HomeScreen(),
+                supportedLocales:
+                    Languages.langages.map((e) => Locale(e.code)).toList(),
+                locale: state.locale,
+                localizationsDelegates: const [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  AppLocalizations.delegate,
+                ],
               ),
-              home: const HomeScreen(),
-              supportedLocales:
-                  Languages.langages.map((e) => Locale(e.code)).toList(),
-              locale: state.locale,
-              localizationsDelegates: const [
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                AppLocalizations.delegate,
-              ],
             );
           } else {
             return const SizedBox.shrink();
