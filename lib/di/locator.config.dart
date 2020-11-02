@@ -9,12 +9,14 @@ import 'package:http/http.dart';
 import 'package:movies_tmdb/domain/usecases/get_coming_soon.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
+import 'package:movies_tmdb/domain/usecases/get_movie_detail.dart';
 import 'package:movies_tmdb/domain/usecases/get_playing_now.dart';
 import 'package:movies_tmdb/domain/usecases/get_popular.dart';
 import 'package:movies_tmdb/domain/usecases/get_trending.dart';
 import 'package:movies_tmdb/presentation/blocs/language_bloc/language_bloc.dart';
 import 'package:movies_tmdb/presentation/blocs/movie_backdrop/movie_backdrop_bloc.dart';
 import 'package:movies_tmdb/presentation/blocs/movie_carousel/movie_carousel_bloc.dart';
+import 'package:movies_tmdb/presentation/blocs/movie_detail/movie_detail_bloc.dart';
 import 'package:movies_tmdb/data/data_sources/movie_remote_data_source.dart';
 import 'package:movies_tmdb/domain/repositories/movie_repository.dart';
 import 'package:movies_tmdb/data/repositories/movie_repository_impl.dart';
@@ -40,12 +42,16 @@ GetIt $initGetIt(
   gh.lazySingleton<MovieRepository>(
       () => MovieRepositoryImpl(get<MovieRemoteDataSource>()));
   gh.lazySingleton<GetComingSoon>(() => GetComingSoon(get<MovieRepository>()));
+  gh.lazySingleton<GetMovieDetail>(
+      () => GetMovieDetail(get<MovieRepository>()));
   gh.lazySingleton<GetPlayingNow>(() => GetPlayingNow(get<MovieRepository>()));
   gh.lazySingleton<GetPopular>(() => GetPopular(get<MovieRepository>()));
   gh.lazySingleton<GetTrending>(() => GetTrending(get<MovieRepository>()));
   gh.lazySingleton<MovieCarouselBloc>(() => MovieCarouselBloc(
       movieBackdropBloc: get<MovieBackdropBloc>(),
       getTrending: get<GetTrending>()));
+  gh.factory<MovieDetailBloc>(
+      () => MovieDetailBloc(getMovieDetail: get<GetMovieDetail>()));
   gh.lazySingleton<MovieTabbedBloc>(() => MovieTabbedBloc(
         getPopular: get<GetPopular>(),
         getPlayingNow: get<GetPlayingNow>(),

@@ -6,4 +6,10 @@ extension ThemeTextExtension on TextTheme {
         color: AppColor.royalBlue,
         fontWeight: FontWeight.w600,
       );
+  TextStyle get greySubtitle1 => subtitle1.copyWith(
+        color: Colors.grey,
+      );
+  TextStyle get violetHeadline6 => subtitle1.copyWith(
+        color: AppColor.violet,
+      );
 }
